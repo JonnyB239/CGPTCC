@@ -1,4 +1,4 @@
-local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/"
+local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/main/"
 local filesToUpdate = {"startup", "main"}  -- List of scripts to update
 
 local function downloadFile(file)

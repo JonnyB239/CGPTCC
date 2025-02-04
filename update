@@ -1,0 +1,35 @@
+local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/main/"
+local filesToUpdate = {"startup.lua", "main.lua"}  -- List of scripts to update
+
+local function downloadFile(file)
+    local url = repoURL .. file
+    print("Downloading: " .. url)
+    shell.run("wget", url, file)
+end
+
+local function update()
+    print("Updating files...")
+    for _, file in ipairs(filesToUpdate) do
+        downloadFile(file)
+    end
+    print("Update complete! Rebooting...")
+    os.reboot()
+end
+
+-- Listen for rednet update signal
+local modem = peripheral.find("modem")
+if modem then
+    rednet.open(peripheral.getName(modem))
+    print("Listening for update command...")
+
+    while true do
+        local senderId, message = rednet.receive()
+        if message == "update" then
+            print("Update command received!")
+            update()
+        end
+    end
+else
+    print("No modem detected. Running update manually.")
+    update()
+end

@@ -1,17 +1,55 @@
-local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/main/"
-local filesToUpdate = {"startup", "main"}  -- List of scripts to update
+-- update.lua (Improved version using update_list.lua)
 
+local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/main/"
+local updateListFile = "update_list.lua"
+local tempUpdateList = ".update_list_tmp.lua"
+
+-- Function to download a file
 local function downloadFile(file)
     local url = repoURL .. file
     print("Downloading: " .. url)
     shell.run("wget", url, file)
 end
 
+-- Function to get the update list
+local function getUpdateList()
+    local url = repoURL .. updateListFile
+
+    -- Download the update list script
+    shell.run("wget", url, tempUpdateList)
+
+    -- Load the update list as a Lua script
+    if fs.exists(tempUpdateList) then
+        local success, fileList = pcall(dofile, tempUpdateList)
+        fs.delete(tempUpdateList) -- Clean up
+
+        if success and type(fileList) == "table" then
+            return fileList
+        else
+            print("Error loading update list!")
+            return {}
+        end
+    else
+        print("Failed to fetch update list!")
+        return {}
+    end
+end
+
+-- Function to update all files
 local function update()
+    print("Fetching update list...")
+    local filesToUpdate = getUpdateList()
+
+    if #filesToUpdate == 0 then
+        print("No files to update. Exiting.")
+        return
+    end
+
     print("Updating files...")
     for _, file in ipairs(filesToUpdate) do
         downloadFile(file)
     end
+
     print("Update complete! Rebooting...")
     os.reboot()
 end

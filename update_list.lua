@@ -3,7 +3,7 @@ return {
     "main.lua",
     "turtle_script.lua",
     "api.lua",
-    "gui",
-    "network",
-    "filesystem"
+    "gui.lua",
+    "network.lua",
+    "filesystem.lua"
 }

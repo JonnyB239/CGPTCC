@@ -5,5 +5,6 @@ return {
     "api.lua",
     "gui.lua",
     "network.lua",
-    "filesystem.lua"
+    "filesystem.lua",
+    "window_manager.lua"
 }

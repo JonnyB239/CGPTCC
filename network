@@ -1,0 +1,30 @@
+-- network.lua - Network Detection API for ComputerCraft OS
+-- Automatically detects advanced monitors connected directly or via modem
+
+local network = {}
+
+function network.findMonitor()
+    -- Check for directly attached monitors
+    for _, side in ipairs(peripheral.getNames()) do
+        if peripheral.getType(side) == "monitor" then
+            return peripheral.wrap(side)
+        end
+    end
+    
+    -- Check for networked monitors via modem
+    if peripheral.find("modem") then
+        rednet.open(peripheral.getName(peripheral.find("modem")))
+        local id, message = rednet.receive("monitor")
+        if id and message == "request_monitor" then
+            rednet.send(id, "monitor_response")
+            local monitor = peripheral.wrap(peripheral.getNames()[id])
+            if monitor then
+                return monitor
+            end
+        end
+    end
+    
+    return nil
+end
+
+return network

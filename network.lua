@@ -26,7 +26,7 @@ function network.findMonitor()
         end
     end
     
-    return nil
+    return false
 end
 
 return network

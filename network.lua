@@ -3,7 +3,7 @@
 
 local network = {}
 
-function network.findMonitor()
+function findMonitor()
     -- Check for directly attached monitors
     for _, side in ipairs(peripheral.getNames()) do
         print("checking " .. side .. " for connected monitor")

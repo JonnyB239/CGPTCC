@@ -4,5 +4,6 @@ return {
     "turtle_script.lua",
     "api.lua",
     "gui",
-    "network"
+    "network",
+    "filesystem"
 }

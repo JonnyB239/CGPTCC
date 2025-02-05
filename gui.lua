@@ -1,6 +1,8 @@
 -- gui.lua - GUI Handling API for ComputerCraft OS
 -- Manages drawing, buttons, and touch interactions on an advanced monitor
 
+os.loadAPI("window_manager.lua")
+
 local gui = {}
 local monitor
 local buttons = {}

@@ -6,7 +6,9 @@ local network = {}
 function network.findMonitor()
     -- Check for directly attached monitors
     for _, side in ipairs(peripheral.getNames()) do
+        print("checking " .. side .. " for connected monitor")
         if peripheral.getType(side) == "monitor" then
+            print("found monitor on "..side)
             return peripheral.wrap(side)
         end
     end

@@ -42,7 +42,7 @@ local function downloadFile(file)
     local url = rawBaseURL .. file
     print("Downloading: " .. url)
     shell.run("delete",file)
-    shell.run("wget", url, file,)
+    shell.run("wget", url, file)
 end
 
 -- Function to update all files

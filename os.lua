@@ -10,7 +10,7 @@ os.loadAPI("network")
 
 -- Detect and configure monitor
 print("attempting to set globalMonitor")
-globalMonitor = network.lua.findMonitor()  -- Automatically detects an attached or networked monitor
+globalMonitor = network.findMonitor()  -- Automatically detects an attached or networked monitor
 if not globalMonitor then
     print("No advanced monitor detected!")
     return

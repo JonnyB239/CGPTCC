@@ -41,7 +41,8 @@ end
 local function downloadFile(file)
     local url = rawBaseURL .. file
     print("Downloading: " .. url)
-    shell.run("wget", url, file, "-f") -- "-f" forces overwriting the file
+    shell.run("delete",file)
+    shell.run("wget", url, file,)
 end
 
 -- Function to update all files

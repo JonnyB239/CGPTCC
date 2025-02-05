@@ -4,9 +4,9 @@
 -- Modular API structure for easy updates
 
 -- Load APIs
-os.loadAPI("gui.lua")
-os.loadAPI("filesystem.lua")
-os.loadAPI("network.lua")
+os.loadAPI("gui")
+os.loadAPI("filesystem")
+os.loadAPI("network")
 
 -- Detect and configure monitor
 print("attempting to set globalMonitor")

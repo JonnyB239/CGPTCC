@@ -25,7 +25,7 @@ function network.findMonitor()
             end
         end
     end
-    
+    print("failed to find monitor")
     return false
 end
 

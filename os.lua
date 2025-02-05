@@ -7,6 +7,7 @@
 os.loadAPI("gui")
 os.loadAPI("filesystem")
 os.loadAPI("network")
+os.loadAPI("window_manager")
 
 -- Detect and configure monitor
 print("attempting to set globalMonitor")

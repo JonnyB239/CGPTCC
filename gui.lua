@@ -5,13 +5,13 @@ local gui = {}
 local monitor
 local buttons = {}
 
-function gui.init(mon)
+function init(mon)
     monitor = mon
     monitor.setTextScale(1)
     gui.clear()
 end
 
-function gui.clear()
+function clear()
     monitor.setBackgroundColor(colors.black)
     monitor.clear()
 end
@@ -28,7 +28,7 @@ function gui.drawDesktop()
     gui.render()
 end
 
-function gui.addButton(label, x1, y1, x2, y2, bgColor, textColor, callback)
+function addButton(label, x1, y1, x2, y2, bgColor, textColor, callback)
     table.insert(buttons, {
         label = label,
         x1 = x1, y1 = y1, x2 = x2, y2 = y2,
@@ -37,7 +37,7 @@ function gui.addButton(label, x1, y1, x2, y2, bgColor, textColor, callback)
     })
 end
 
-function gui.render()
+function render()
     for _, button in ipairs(buttons) do
         monitor.setBackgroundColor(button.bgColor)
         monitor.setTextColor(button.textColor)
@@ -52,7 +52,7 @@ function gui.render()
     end
 end
 
-function gui.handleTouch(_, x, y)
+function handleTouch(_, x, y)
     for _, button in ipairs(buttons) do
         if x >= button.x1 and x <= button.x2 and y >= button.y1 and y <= button.y2 then
             button.callback()

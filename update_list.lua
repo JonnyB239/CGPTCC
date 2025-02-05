@@ -2,5 +2,7 @@ return {
     "startup.lua",
     "main.lua",
     "turtle_script.lua",
-    "api.lua"
+    "api.lua",
+    "gui",
+    "network"
 }

@@ -1,52 +1,61 @@
--- update.lua (Improved version using update_list.lua)
+-- update.lua (Now forces overwriting of existing files)
 
-local repoURL = "https://raw.githubusercontent.com/JonnyB239/CGPTCC/main/"
-local updateListFile = "update_list.lua"
-local tempUpdateList = ".update_list_tmp.lua"
+local repoOwner = "JonnyB239"
+local repoName = "CGPTCC"
+local branch = "main"
+local apiURL = "https://api.github.com/repos/" .. repoOwner .. "/" .. repoName .. "/contents/"
+local rawBaseURL = "https://raw.githubusercontent.com/" .. repoOwner .. "/" .. repoName .. "/" .. branch .. "/"
 
--- Function to download a file
-local function downloadFile(file)
-    local url = repoURL .. file
-    print("Downloading: " .. url)
-    shell.run("wget", url, file)
-end
-
--- Function to get the update list
-local function getUpdateList()
-    local url = repoURL .. updateListFile
-
-    -- Download the update list script
-    shell.run("wget", url, tempUpdateList)
-
-    -- Load the update list as a Lua script
-    if fs.exists(tempUpdateList) then
-        local success, fileList = pcall(dofile, tempUpdateList)
-        fs.delete(tempUpdateList) -- Clean up
-
-        if success and type(fileList) == "table" then
-            return fileList
-        else
-            print("Error loading update list!")
-            return {}
-        end
-    else
-        print("Failed to fetch update list!")
+-- Function to fetch file list from GitHub API
+local function getFileList()
+    print("Fetching file list from GitHub...")
+    local response = http.get(apiURL)
+    
+    if not response then
+        print("Failed to fetch file list!")
         return {}
     end
+
+    local data = response.readAll()
+    response.close()
+
+    -- Parse JSON response
+    local success, fileData = pcall(textutils.unserializeJSON, data)
+    if not success or type(fileData) ~= "table" then
+        print("Error parsing file list!")
+        return {}
+    end
+
+    -- Extract file names
+    local fileList = {}
+    for _, file in ipairs(fileData) do
+        if file.type == "file" then
+            table.insert(fileList, file.name)
+        end
+    end
+
+    return fileList
+end
+
+-- Function to download a file (forces overwrite)
+local function downloadFile(file)
+    local url = rawBaseURL .. file
+    print("Downloading: " .. url)
+    shell.run("wget", url, file, "-f") -- "-f" forces overwriting the file
 end
 
 -- Function to update all files
 local function update()
     print("Fetching update list...")
-    local filesToUpdate = getUpdateList()
+    local fileList = getFileList()
 
-    if #filesToUpdate == 0 then
+    if #fileList == 0 then
         print("No files to update. Exiting.")
         return
     end
 
     print("Updating files...")
-    for _, file in ipairs(filesToUpdate) do
+    for _, file in ipairs(fileList) do
         downloadFile(file)
     end
 
@@ -54,20 +63,4 @@ local function update()
     os.reboot()
 end
 
--- Listen for rednet update signal
-local modem = peripheral.find("modem")
-if modem then
-    rednet.open(peripheral.getName(modem))
-    print("Listening for update command...")
-
-    while true do
-        local senderId, message = rednet.receive()
-        if message == "update" then
-            print("Update command received!")
-            update()
-        end
-    end
-else
-    print("No modem detected. Running update manually.")
-    update()
-end
+update()

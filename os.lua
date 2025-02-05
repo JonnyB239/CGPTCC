@@ -4,9 +4,9 @@
 -- Modular API structure for easy updates
 
 -- Load APIs
-os.loadAPI("gui")
-os.loadAPI("filesystem")
-os.loadAPI("network")
+os.loadAPI("gui.lua")
+os.loadAPI("filesystem.lua")
+os.loadAPI("network.lua")
 
 -- Detect and configure monitor
 globalMonitor = network.findMonitor()  -- Automatically detects an attached or networked monitor
